@@ -7,6 +7,8 @@ using System.Linq;
 [System.Serializable]
 public class TrafficSpawnEntry
 {
+    public bool isUnique;
+
     public string vehicleName;
 
     public TrafficVehicle prefab;
@@ -32,8 +34,7 @@ public class TrafficSpawner : MonoBehaviour
     public float despawnY = -15f;
 
     [Header("Traffic Movement")]
-    [Min(0.1f)]
-    public float trafficSpeed = 8f;
+
 
     [Min(0f)]
     public float minimumGap = 3f;
@@ -62,6 +63,22 @@ public class TrafficSpawner : MonoBehaviour
     public List<TrafficSpawnEntry> vehicles =
         new List<TrafficSpawnEntry>();
 
+    [Header("Dynamic Difficulty")]
+    [Min(0.1f)]
+    public float trafficSpeed = 8f;
+    public float spawnInterval = 2.5f;
+    public float uniqueCarChance = 0.05f;
+
+    public void SetDifficulty(
+    float newTrafficSpeed,
+    float newSpawnInterval,
+    float newUniqueCarChance)
+    {
+        trafficSpeed = newTrafficSpeed;
+        spawnInterval = newSpawnInterval;
+        uniqueCarChance = newUniqueCarChance;
+    }
+
     private class PlannedVehicle
     {
         public TrafficVehicle prefab;
@@ -84,8 +101,6 @@ public class TrafficSpawner : MonoBehaviour
         new List<WavePlan>();
 
     private float maxVehicleLength = 4f;
-
-    private float spawnInterval;
 
     private void Start()
     {
@@ -229,6 +244,7 @@ public class TrafficSpawner : MonoBehaviour
 
     private TrafficSpawnEntry GetRandomVehicle()
     {
+
         float totalWeight = 0f;
 
         foreach (TrafficSpawnEntry entry in vehicles)
