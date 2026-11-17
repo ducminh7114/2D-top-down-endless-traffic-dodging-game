@@ -30,8 +30,11 @@ public class TrafficSpawner : MonoBehaviour
 
     [Header("Spawn Position")]
     public float spawnY = 15f;
-
     public float despawnY = -15f;
+
+    [Header("Spawn Position Variation")]
+    public float minSpawnYOffset = -2f;
+    public float maxSpawnYOffset = 2f;
 
     [Header("Traffic Movement")]
 
@@ -66,8 +69,10 @@ public class TrafficSpawner : MonoBehaviour
     [Header("Dynamic Difficulty")]
     [Min(0.1f)]
     public float trafficSpeed = 8f;
-    public float spawnInterval = 2.5f;
-    public float uniqueCarChance = 0.05f;
+    public float spawnInterval = 0.5f;
+    public float uniqueCarChance = 0.1f;
+
+
 
     public void SetDifficulty(
     float newTrafficSpeed,
@@ -205,9 +210,11 @@ public class TrafficSpawner : MonoBehaviour
                 planned.prefab.lanesOccupied
             );
 
+            float randomY = spawnY + Random.Range(minSpawnYOffset, maxSpawnYOffset);
+
             Vector3 position = new Vector3(
                 startX,
-                vehicleY,
+                randomY,
                 0f
             );
 

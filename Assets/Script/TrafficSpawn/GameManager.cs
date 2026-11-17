@@ -25,8 +25,8 @@ public class GameManager : MonoBehaviour
     public float baseTrafficSpeed = 8f;
     public float maximumTrafficSpeed = 16f;
 
-    public float baseSpawnInterval = 2.5f;
-    public float minimumSpawnInterval = 0.8f;
+    public float baseSpawnInterval = 0.5f;
+    public float minimumSpawnInterval = 0.1f;
 
     [Range(0f, 1f)]
     public float baseUniqueCarChance = 0.05f;
@@ -96,7 +96,7 @@ public class GameManager : MonoBehaviour
         gameOverScoreText = root.Q<Label>("GameOverScoreText");
         gameOverHighScoreText = root.Q<Label>("GameOverHighScoreText");
 
-        gameOverPanel = root.Q<VisualElement>("GameOverPanel");
+        gameOverPanel = root.Q<VisualElement>("gameOverPanel");
 
         restartButton = root.Q<Button>("RestartButton");
         mainMenuButton = root.Q<Button>("MainMenuButton");
@@ -124,9 +124,9 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        if (currentState == GameState.MainMenu)
+    /*    if (currentState == GameState.MainMenu)
             return;
-
+*/
         StartGame();
     }
 

@@ -1,10 +1,25 @@
+
 using UnityEngine;
 
 public class PlayerHealth : Health
 {
-    protected override void Die()
+    private void OnEnable()
     {
-        base.Die();
+        onDead += HandlePlayerDeath;
+    }
+
+    private void OnDisable()
+    {
+        onDead -= HandlePlayerDeath;
+    }
+
+    private void HandlePlayerDeath()
+    {
         Debug.Log("Player Died");
+
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.GameOver();
+        }
     }
 }

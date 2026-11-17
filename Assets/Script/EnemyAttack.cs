@@ -1,18 +1,26 @@
+
 using UnityEngine;
 
 public class EnemyAttack : MonoBehaviour
 {
-    public EnemyHealth Health;
+    public Health health;
+
     public int damage;
     public int enemyDamage;
 
-    private void OnTriggerEnter2D(Collider2D collision) 
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        var playerHealth = collision.GetComponent<PlayerHealth>();
+        PlayerHealth playerHealth = collision.GetComponent<PlayerHealth>();
+
         if (playerHealth != null)
         {
             playerHealth.TakeDamage(damage);
-            Health.TakeDamage(enemyDamage);
+
+            if (health != null)
+            {
+                health.TakeDamage(enemyDamage);
+            }
         }
     }
 }
+
