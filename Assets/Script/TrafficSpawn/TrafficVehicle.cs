@@ -1,5 +1,8 @@
+
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 using System.Collections;
+
 public enum TrafficTurnDirection
 {
     None,
@@ -32,10 +35,12 @@ public class TrafficVehicle : MonoBehaviour
     public float turnAngle = 45f;
     public float rotationSpeed = 5f;
 
-    [Header("Turing Light")]
-    public Light RightHeadlight;
-    public Light LeftHeadlight;
-    public float blinkInterval;
+    [Header("Turn Signal Lights (URP 2D)")]
+    public Light2D RightHeadlight;
+    public Light2D LeftHeadlight;
+
+    [Min(0.05f)]
+    public float blinkInterval = 0.3f;
 
     private float moveSpeed;
     private float despawnY;
@@ -52,8 +57,7 @@ public class TrafficVehicle : MonoBehaviour
     private float targetRotation;
 
     private Coroutine blinkCoroutine;
-
-    private bool turningLightStarted = false;
+    private bool turningLightStarted;
 
     public void Initialize(
         float speed,
@@ -70,9 +74,10 @@ public class TrafficVehicle : MonoBehaviour
 
         elapsed = 0f;
         turnElapsed = 0f;
+
+        turningLightStarted = false;
         initialized = true;
 
-        // Determine rotation direction.
         if (targetX > startingX)
             targetRotation = -turnAngle;
         else if (targetX < startingX)
@@ -80,23 +85,17 @@ public class TrafficVehicle : MonoBehaviour
         else
             targetRotation = 0f;
 
+        // Turn signals start disabled.
+        if (LeftHeadlight != null)
+            LeftHeadlight.enabled = false;
 
-        if (LeftHeadlight == null)
-        {
-            LeftHeadlight = GetComponent<Light>();
-        }
-
-        if (RightHeadlight == null)
-        {
-            LeftHeadlight = GetComponent<Light>();
-        }
-
-        // Assign RightHeadlight separately in Inspector.
+        if (RightHeadlight != null)
+            RightHeadlight.enabled = false;
     }
 
     private void StartTurningLight()
     {
-        Light selectedLight = null;
+        Light2D selectedLight = null;
 
         switch (turnDirection)
         {
@@ -135,7 +134,7 @@ public class TrafficVehicle : MonoBehaviour
 
         Vector3 position = transform.position;
 
-        // Move traffic downward.
+        // Move vehicle downward.
         position.y -= moveSpeed * Time.deltaTime;
 
         if (canTurn && elapsed >= laneChangeDelay)
@@ -160,9 +159,12 @@ public class TrafficVehicle : MonoBehaviour
                 smoothT
             );
 
-            float direction = Mathf.Sign(targetX - startingX);
+            float direction = Mathf.Sign(
+                targetX - startingX
+            );
 
-            float targetAngle = -turnAngle * direction * (1f - smoothT);
+            float targetAngle =
+                -turnAngle * direction * (1f - smoothT);
 
             transform.rotation = Quaternion.Lerp(
                 transform.rotation,
@@ -171,36 +173,41 @@ public class TrafficVehicle : MonoBehaviour
             );
         }
 
-        // Apply movement.
         transform.position = position;
 
-        // Remove vehicles outside the screen.
         if (transform.position.y <= despawnY)
         {
             Destroy(gameObject);
         }
     }
 
-    private IEnumerator BlinkLight(Light targetLight)
+    private IEnumerator BlinkLight(Light2D targetLight)
     {
         if (targetLight == null)
-        {
             yield break;
-        }
 
         float timer = 0f;
         bool lightOn = false;
 
+        float interval = Mathf.Max(0.05f, blinkInterval);
+
         while (timer < laneChangeDuration)
         {
-            lightOn = true;
+            lightOn = !lightOn;
             targetLight.enabled = lightOn;
 
-            yield return new WaitForSeconds(blinkInterval);
+            yield return new WaitForSeconds(interval);
 
-            timer += blinkInterval;
+            timer += interval;
         }
 
         targetLight.enabled = false;
+        blinkCoroutine = null;
+    }
+
+    private void OnDestroy()
+    {
+        if (blinkCoroutine != null)
+            StopCoroutine(blinkCoroutine);
     }
 }

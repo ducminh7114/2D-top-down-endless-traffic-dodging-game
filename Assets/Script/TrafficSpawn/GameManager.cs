@@ -124,9 +124,8 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-    /*    if (currentState == GameState.MainMenu)
+      if (currentState == GameState.MainMenu)
             return;
-*/
         StartGame();
     }
 
@@ -238,7 +237,7 @@ public class GameManager : MonoBehaviour
             scoreText.text = currentScore.ToString();
 
         if (highScoreText != null)
-            highScoreText.text = "HIGH SCORE: " + highScore;
+            highScoreText.text = " " + highScore;
     }
 
     public void RestartGame()

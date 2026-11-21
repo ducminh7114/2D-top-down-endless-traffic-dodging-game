@@ -1,0 +1,11 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="MainMenuPanel" style="flex-grow: 1; align-items: center; justify-content: flex-start; flex-direction: column; align-self: center; width: 720px; height: 1280px; font-size: 40px;">
+        <ui:Label text="Top down traffic game" style="align-items: center; justify-content: center; align-self: center; align-content: center; top: 196px; width: 721px; -unity-text-align: middle-center; white-space: pre-wrap; text-overflow: ellipsis;"/>
+        <ui:Button text="Start game" name="StartButton" style="align-items: center; justify-content: center; align-self: center; align-content: center; top: 220px; white-space: pre-wrap; text-overflow: ellipsis; width: 250px; height: 100px; aspect-ratio: auto; background-size: 100% 100%;"/>
+        <ui:Button text="Settings" name="SettingsButton" style="align-items: center; justify-content: center; align-self: center; align-content: center; top: 250px; height: 100px; width: 250px; white-space: pre-wrap; text-overflow: ellipsis;"/>
+        <ui:Button text="Quit" name="QuitButton" style="align-items: center; justify-content: center; align-self: center; align-content: center; top: 280px; height: 100px; width: 250px; white-space: pre-wrap; text-overflow: ellipsis;"/>
+    </ui:VisualElement>
+    <ui:VisualElement name="SettingsPanel" enabled="true" style="flex-grow: 1; position: absolute; height: 1280px; width: 720px; align-items: stretch; top: 16px; left: auto;">
+        <ui:Button text="Back" name="BackButton" style="white-space: normal; justify-content: space-between; align-self: flex-end; align-items: flex-end; align-content: flex-end; top: 1160px; left: auto; height: 100px; width: 200px; font-size: 40px;"/>
+    </ui:VisualElement>
+</ui:UXML>
