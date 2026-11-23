@@ -39,6 +39,7 @@ public class GameManager : MonoBehaviour
     [Header("References")]
     public TrafficSpawner trafficSpawner;
     public ScrollingBG scrollingBG;
+    public DayNightManager dayNightManager;
 
     [Header("UI Document")]
     public UIDocument uiDocument;
@@ -124,8 +125,9 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-      if (currentState == GameState.MainMenu)
+        if (currentState == GameState.MainMenu)
             return;
+
         StartGame();
     }
 
@@ -166,7 +168,7 @@ public class GameManager : MonoBehaviour
     private void UpdateDifficulty()
     {
         Difficulty01 = Mathf.Clamp01(
-            currentScore / scoreForMaximumDifficulty
+            currentScore / Mathf.Max(1f, scoreForMaximumDifficulty)
         );
 
         CurrentTrafficSpeed = Mathf.Lerp(
@@ -199,6 +201,12 @@ public class GameManager : MonoBehaviour
         if (scrollingBG != null)
         {
             scrollingBG.SetBackgroundSpeed(Difficulty01);
+        }
+
+        // Update day/night environment based on current score.
+        if (dayNightManager != null)
+        {
+            dayNightManager.CheckScore(currentScore);
         }
     }
 

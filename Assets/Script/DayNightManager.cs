@@ -29,11 +29,17 @@ public class DayNightManager : MonoBehaviour
     [Range(0f, 1f)]
     public float nightIntensity = 0.25f;
 
-    [Header("Background")]
-    public SpriteRenderer backgroundRenderer;
+    [Header("Car Headlights")]
+    public Light2D[] carHeadlights;
+
+    [Header("Scrolling Background")]
+    public ScrollingBG scrollingBG;
 
     public Color dayBackgroundColor = Color.white;
     public Color nightBackgroundColor = new Color(0.3f, 0.35f, 0.5f);
+
+    private SpriteRenderer background1Renderer;
+    private SpriteRenderer background2Renderer;
 
     [Header("Transition")]
     [Min(0f)]
@@ -52,12 +58,30 @@ public class DayNightManager : MonoBehaviour
     private float startLightIntensity;
     private float targetLightIntensity;
 
-    private Color startBackgroundColor;
+    private Color startBackground1Color;
+    private Color startBackground2Color;
+
     private Color targetBackgroundColor;
 
     private void Start()
     {
         lastMilestone = 0;
+
+        // Get SpriteRenderers from scrolling backgrounds.
+        if (scrollingBG != null)
+        {
+            if (scrollingBG.background1 != null)
+            {
+                background1Renderer =
+                    scrollingBG.background1.GetComponentInChildren<SpriteRenderer>();
+            }
+
+            if (scrollingBG.background2 != null)
+            {
+                background2Renderer =
+                    scrollingBG.background2.GetComponentInChildren<SpriteRenderer>();
+            }
+        }
 
         SetEnvironment(
             startAtDay
@@ -99,6 +123,9 @@ public class DayNightManager : MonoBehaviour
     {
         CurrentEnvironment = state;
 
+        // Toggle car headlights.
+        SetHeadlights(state == EnvironmentState.Night);
+
         if (state == EnvironmentState.Day)
         {
             targetLightColor = dayColor;
@@ -118,10 +145,11 @@ public class DayNightManager : MonoBehaviour
             startLightIntensity = globalLight.intensity;
         }
 
-        if (backgroundRenderer != null)
-        {
-            startBackgroundColor = backgroundRenderer.color;
-        }
+        if (background1Renderer != null)
+            startBackground1Color = background1Renderer.color;
+
+        if (background2Renderer != null)
+            startBackground2Color = background2Renderer.color;
 
         if (instant || transitionDuration <= 0f)
         {
@@ -131,6 +159,18 @@ public class DayNightManager : MonoBehaviour
 
         transitionTimer = 0f;
         isTransitioning = true;
+    }
+
+    private void SetHeadlights(bool turnOn)
+    {
+        if (carHeadlights == null)
+            return;
+
+        foreach (Light2D headlight in carHeadlights)
+        {
+            if (headlight != null)
+                headlight.enabled = turnOn;
+        }
     }
 
     private void UpdateTransition()
@@ -159,10 +199,19 @@ public class DayNightManager : MonoBehaviour
             );
         }
 
-        if (backgroundRenderer != null)
+        if (background1Renderer != null)
         {
-            backgroundRenderer.color = Color.Lerp(
-                startBackgroundColor,
+            background1Renderer.color = Color.Lerp(
+                startBackground1Color,
+                targetBackgroundColor,
+                t
+            );
+        }
+
+        if (background2Renderer != null)
+        {
+            background2Renderer.color = Color.Lerp(
+                startBackground2Color,
                 targetBackgroundColor,
                 t
             );
@@ -184,10 +233,14 @@ public class DayNightManager : MonoBehaviour
             globalLight.intensity = targetLightIntensity;
         }
 
-        if (backgroundRenderer != null)
+        if (background1Renderer != null)
         {
-            backgroundRenderer.color = targetBackgroundColor;
+            background1Renderer.color = targetBackgroundColor;
+        }
+
+        if (background2Renderer != null)
+        {
+            background2Renderer.color = targetBackgroundColor;
         }
     }
 }
-
