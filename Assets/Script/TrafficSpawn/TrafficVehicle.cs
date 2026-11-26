@@ -42,6 +42,20 @@ public class TrafficVehicle : MonoBehaviour
     [Min(0.05f)]
     public float blinkInterval = 0.3f;
 
+    [Header("Golden Vehicle")]
+    [Range(0f, 1f)]
+    public float goldenChance = 0.01f;
+
+    public bool isGolden = false;
+
+    public TrafficVehicle goldenPrefab;
+
+    [Header("Coin Reward")]
+    public int CoinReward = 1;
+
+    private bool coinCollected = false;
+    private bool initialized;
+
     private float moveSpeed;
     private float despawnY;
 
@@ -52,28 +66,11 @@ public class TrafficVehicle : MonoBehaviour
     private float turnElapsed;
 
     private bool canTurn;
-    private bool initialized;
-
     private float targetRotation;
 
     private Coroutine blinkCoroutine;
     private bool turningLightStarted;
 
-    [Header("Golden Vehicle")]
-    [Range(0f, 1f)]
-    public float goldenChance = 0.01f;
-
-    public bool isGolden = false;
-
-    public Color GoldColor =
-        new Color32(255, 193, 7, 255);
-
-    public SpriteRenderer vehicleRenderer;
-
-    [Header("Coin Reward")]
-    public int CoinReward = 1;
-
-    private bool coinCollected = false;
 
     public void Initialize(
         float speed,
@@ -92,10 +89,8 @@ public class TrafficVehicle : MonoBehaviour
         turnElapsed = 0f;
 
         turningLightStarted = false;
-        initialized = true;
-
         coinCollected = false;
-        SetGolden(isGolden);
+        initialized = true;
 
         if (targetX > startingX)
             targetRotation = -turnAngle;
@@ -104,7 +99,12 @@ public class TrafficVehicle : MonoBehaviour
         else
             targetRotation = 0f;
 
-        // Turn signals start disabled.
+
+        if (!isGolden)
+        {
+            GenerateGoldenVehicle();
+        }
+
         if (LeftHeadlight != null)
             LeftHeadlight.enabled = false;
 
@@ -112,36 +112,55 @@ public class TrafficVehicle : MonoBehaviour
             RightHeadlight.enabled = false;
     }
 
-    public void SetGolden(bool golden)
+
+    private void GenerateGoldenVehicle()
     {
-        isGolden = Random.value < goldenChance;
+        if (goldenPrefab == null)
+            return;
 
-        if (vehicleRenderer == null)
-            vehicleRenderer = GetComponentInChildren<SpriteRenderer>();
+        if (Random.value >= goldenChance)
+            return;
 
-        if (vehicleRenderer != null)
-        {
-            vehicleRenderer.color = golden
-                ? GoldColor
-                : Color.white;
-        }
+        TrafficVehicle goldenVehicle = Instantiate(
+            goldenPrefab,
+            transform.position,
+            transform.rotation,
+            transform.parent
+        );
+
+        // Preserve original movement settings.
+        goldenVehicle.Initialize(
+            moveSpeed,
+            targetX,
+            canTurn,
+            despawnY
+        );
+
+        // Remove original normal vehicle.
+        Destroy(gameObject);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if(!isGolden || coinCollected)
-        {
+        if (!isGolden || coinCollected)
             return;
-        }
-        if (other.CompareTag("Player"))
+
+        if (!other.CompareTag("Player"))
+            return;
+
+        coinCollected = true;
+
+        if (GameManager.Instance != null)
         {
-            coinCollected = true;
-            if (GameManager.Instance != null)
-            {
-                GameManager.Instance.AddCoins(CoinReward);
-            }
-            Debug.Log("Golden Vehicle Collected");
+            GameManager.Instance.AddCoins(CoinReward);
         }
+
+        Debug.Log(
+            "Golden Vehicle Collected! +" +
+            CoinReward + " coin(s)"
+        );
+
+        Destroy(gameObject);
     }
 
     private void StartTurningLight()
@@ -175,6 +194,10 @@ public class TrafficVehicle : MonoBehaviour
             );
         }
     }
+
+    // --------------------------------
+    // VEHICLE MOVEMENT
+    // --------------------------------
 
     private void Update()
     {
