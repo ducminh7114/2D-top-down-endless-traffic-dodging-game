@@ -12,14 +12,22 @@ public class EnemyAttack : MonoBehaviour
     {
         PlayerHealth playerHealth = collision.GetComponent<PlayerHealth>();
 
-        if (playerHealth != null)
-        {
-            playerHealth.TakeDamage(damage);
+        TrafficVehicle vehicle =
+                       GetComponent<TrafficVehicle>();
 
-            if (health != null)
-            {
-                health.TakeDamage(enemyDamage);
-            }
+        if (vehicle != null && vehicle.isGolden)
+        {
+            health.TakeDamage(enemyDamage);
+            // Golden vehicle: reward coins, no damage.
+            return;
+        }
+
+        // Normal vehicle: deal damage.
+        playerHealth.TakeDamage(damage);
+
+        if (health != null)
+        {
+            health.TakeDamage(enemyDamage);
         }
     }
 }

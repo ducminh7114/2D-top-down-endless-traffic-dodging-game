@@ -38,7 +38,6 @@ public class TrafficSpawner : MonoBehaviour
 
     [Header("Traffic Movement")]
 
-
     [Min(0f)]
     public float minimumGap = 3f;
 
@@ -249,35 +248,68 @@ public class TrafficSpawner : MonoBehaviour
         return laneCentersX[lane];
     }
 
+
     private TrafficSpawnEntry GetRandomVehicle()
     {
+        // Separate normal and unique vehicles.
+        List<TrafficSpawnEntry> normalVehicles =
+            vehicles.Where(v =>
+                v.prefab != null &&
+                !v.isUnique &&
+                v.spawnWeight > 0f
+            ).ToList();
 
-        float totalWeight = 0f;
+        List<TrafficSpawnEntry> uniqueVehicles =
+            vehicles.Where(v =>
+                v.prefab != null &&
+                v.isUnique &&
+                v.spawnWeight > 0f
+            ).ToList();
 
-        foreach (TrafficSpawnEntry entry in vehicles)
+        // Decide whether to select a unique vehicle.
+        bool chooseUnique =
+            Random.value < uniqueCarChance;
+
+        List<TrafficSpawnEntry> selectedPool;
+
+        if (chooseUnique && uniqueVehicles.Count > 0)
         {
-            if (entry.prefab != null)
-                totalWeight += Mathf.Max(0f, entry.spawnWeight);
+            selectedPool = uniqueVehicles;
+        }
+        else if (normalVehicles.Count > 0)
+        {
+            selectedPool = normalVehicles;
+        }
+        else if (uniqueVehicles.Count > 0)
+        {
+            selectedPool = uniqueVehicles;
+        }
+        else
+        {
+            return null;
         }
 
-        if (totalWeight <= 0f)
-            return null;
+        // Apply weighted selection within the chosen category.
+        float totalWeight = 0f;
+
+        foreach (TrafficSpawnEntry entry in selectedPool)
+        {
+            totalWeight += entry.spawnWeight;
+        }
 
         float random = Random.Range(0f, totalWeight);
 
-        foreach (TrafficSpawnEntry entry in vehicles)
+        foreach (TrafficSpawnEntry entry in selectedPool)
         {
-            if (entry.prefab == null)
-                continue;
-
-            random -= Mathf.Max(0f, entry.spawnWeight);
+            random -= entry.spawnWeight;
 
             if (random <= 0f)
                 return entry;
         }
 
-        return null;
+        return selectedPool[selectedPool.Count - 1];
     }
+
 
     private WavePlan GenerateRandomWave()
     {

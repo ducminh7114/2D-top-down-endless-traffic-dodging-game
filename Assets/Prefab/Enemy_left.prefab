@@ -571,7 +571,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9608aa3f38a6a9b4eb3f047f2f38bc43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyAttack
-  health: {fileID: 0}
+  health: {fileID: 8258968561155887089}
   damage: 1
   enemyDamage: 1
 --- !u!114 &6576643711251193154
@@ -596,6 +596,10 @@ MonoBehaviour:
   RightHeadlight: {fileID: 4746273849018733330}
   LeftHeadlight: {fileID: 5048687004316539281}
   blinkInterval: 0.3
+  isGolden: 0
+  GoldColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  vehicleRenderer: {fileID: 0}
+  CoinReward: 1
 --- !u!1 &5908657799961630065
 GameObject:
   m_ObjectHideFlags: 0

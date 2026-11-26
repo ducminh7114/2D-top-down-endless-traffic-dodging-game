@@ -459,7 +459,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.0020728186, y: -0.56379837}
+  m_Offset: {x: 0.00058454275, y: -0.63023233}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -469,7 +469,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.25490487, y: 1.9027232}
+  m_Size: {x: 0.33462572, y: 2.0355911}
   m_EdgeRadius: 0
 --- !u!114 &1117468284191321715
 MonoBehaviour:
@@ -523,6 +523,10 @@ MonoBehaviour:
   RightHeadlight: {fileID: 0}
   LeftHeadlight: {fileID: 0}
   blinkInterval: 0.3
+  isGolden: 0
+  GoldColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  vehicleRenderer: {fileID: 0}
+  CoinReward: 1
 --- !u!1 &8377065982000408317
 GameObject:
   m_ObjectHideFlags: 0

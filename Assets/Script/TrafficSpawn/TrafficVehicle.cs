@@ -59,6 +59,22 @@ public class TrafficVehicle : MonoBehaviour
     private Coroutine blinkCoroutine;
     private bool turningLightStarted;
 
+    [Header("Golden Vehicle")]
+    [Range(0f, 1f)]
+    public float goldenChance = 0.01f;
+
+    public bool isGolden = false;
+
+    public Color GoldColor =
+        new Color32(255, 193, 7, 255);
+
+    public SpriteRenderer vehicleRenderer;
+
+    [Header("Coin Reward")]
+    public int CoinReward = 1;
+
+    private bool coinCollected = false;
+
     public void Initialize(
         float speed,
         float destinationX,
@@ -78,6 +94,9 @@ public class TrafficVehicle : MonoBehaviour
         turningLightStarted = false;
         initialized = true;
 
+        coinCollected = false;
+        SetGolden(isGolden);
+
         if (targetX > startingX)
             targetRotation = -turnAngle;
         else if (targetX < startingX)
@@ -91,6 +110,38 @@ public class TrafficVehicle : MonoBehaviour
 
         if (RightHeadlight != null)
             RightHeadlight.enabled = false;
+    }
+
+    public void SetGolden(bool golden)
+    {
+        isGolden = Random.value < goldenChance;
+
+        if (vehicleRenderer == null)
+            vehicleRenderer = GetComponentInChildren<SpriteRenderer>();
+
+        if (vehicleRenderer != null)
+        {
+            vehicleRenderer.color = golden
+                ? GoldColor
+                : Color.white;
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if(!isGolden || coinCollected)
+        {
+            return;
+        }
+        if (other.CompareTag("Player"))
+        {
+            coinCollected = true;
+            if (GameManager.Instance != null)
+            {
+                GameManager.Instance.AddCoins(CoinReward);
+            }
+            Debug.Log("Golden Vehicle Collected");
+        }
     }
 
     private void StartTurningLight()

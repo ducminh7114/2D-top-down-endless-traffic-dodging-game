@@ -41,6 +41,15 @@ public class GameManager : MonoBehaviour
     public ScrollingBG scrollingBG;
     public DayNightManager dayNightManager;
 
+    [Header("Coin System")]
+    public int totalCoins { get; private set; }
+
+    private const string HIGH_SCORE_KEY = "TrafficHighScore";
+    private const string COINS_KEY = "TrafficCoins";
+
+    private Label coinText;
+    private Button deleteAllDataButton;
+
     [Header("UI Document")]
     public UIDocument uiDocument;
 
@@ -74,7 +83,7 @@ public class GameManager : MonoBehaviour
 
         Instance = this;
 
-        highScore = PlayerPrefs.GetInt("TrafficHighScore", 0);
+        LoadPlayerData();
     }
 
     private void OnEnable()
@@ -91,6 +100,7 @@ public class GameManager : MonoBehaviour
         VisualElement root = uiDocument.rootVisualElement;
 
         // Retrieve UXML elements by their names.
+        coinText = root.Q<Label>("CoinText");
         scoreText = root.Q<Label>("ScoreText");
         highScoreText = root.Q<Label>("HighScoreText");
 
@@ -111,6 +121,9 @@ public class GameManager : MonoBehaviour
         if (gameOverPanel != null)
             gameOverPanel.style.display = DisplayStyle.None;
 
+        if (deleteAllDataButton != null)
+            deleteAllDataButton.clicked += DeleteAllData;
+        
         UpdateUI();
     }
 
@@ -121,6 +134,9 @@ public class GameManager : MonoBehaviour
 
         if (mainMenuButton != null)
             mainMenuButton.clicked -= ReturnToMainMenu;
+
+        if (deleteAllDataButton != null)
+            deleteAllDataButton.clicked -= DeleteAllData;
     }
 
     private void Start()
@@ -129,6 +145,32 @@ public class GameManager : MonoBehaviour
             return;
 
         StartGame();
+    }
+
+    private void LoadPlayerData()
+    {
+        highScore = PlayerPrefs.GetInt(HIGH_SCORE_KEY, 0);
+        totalCoins = PlayerPrefs.GetInt(COINS_KEY, 0);
+    }
+
+    private void SavePlayerData()
+    {
+        PlayerPrefs.SetInt(HIGH_SCORE_KEY, highScore);
+        PlayerPrefs.SetInt(COINS_KEY, totalCoins);
+
+        PlayerPrefs.Save();
+    }
+
+    public void AddCoins(int amount)
+    {
+        if (amount <= 0)
+        {
+            return;
+        }
+        totalCoins += amount;
+
+        SavePlayerData();
+        UpdateUI();
     }
 
     private void Update()
@@ -246,6 +288,9 @@ public class GameManager : MonoBehaviour
 
         if (highScoreText != null)
             highScoreText.text = " " + highScore;
+
+        if (coinText != null)
+            coinText.text = totalCoins.ToString();
     }
 
     public void RestartGame()
@@ -262,5 +307,21 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1f;
 
         SceneManager.LoadScene(mainMenuSceneName);
+    }
+
+    public void DeleteAllData()
+    {
+        PlayerPrefs.DeleteKey(HIGH_SCORE_KEY);
+        PlayerPrefs.DeleteKey(COINS_KEY);
+
+        highScore = 0;
+        totalCoins = 0;
+        currentScore = 0;
+
+        PlayerPrefs.Save();
+
+        UpdateUI();
+
+        Debug.LogError("ALL DATA HAS BEEN DELETED");
     }
 }

@@ -761,34 +761,35 @@ MonoBehaviour:
   minimumGap: 0.8
   laneFillChance: 0.65
   lookAheadWaves: 8
-  generationAttempts: 120
+  generationAttempts: 100
   maxLaneChangesBetweenWaves: 1
   initialLaneChangeAllowance: 3
   playerStartingLane: 1
   vehicles:
   - isUnique: 0
     vehicleName: Normal
-    prefab: {fileID: 6748827233263193223, guid: 4473ff5eddcd9374b8c2ac737d92ace0, type: 3}
+    prefab: {fileID: 6748827233263193223, guid: 52fc6556f8a11ba4bb1f785a6e4787f6, type: 3}
     spawnWeight: 80
+  - isUnique: 0
+    vehicleName: Truck_no_Trailer
+    prefab: {fileID: 8415694386978888964, guid: 4d271626e7689b4409245fc5bfa0acfe, type: 3}
+    spawnWeight: 20
   - isUnique: 1
     vehicleName: right
     prefab: {fileID: 6576643711251193154, guid: 614d00c195d862143b585a580823f4a1, type: 3}
-    spawnWeight: 10
+    spawnWeight: 40
   - isUnique: 1
     vehicleName: left
     prefab: {fileID: 6576643711251193154, guid: 8c61340af11fe624ea8cc7a05671519a, type: 3}
-    spawnWeight: 10
-  - isUnique: 0
-    vehicleName: Truck_no_trailer
-    prefab: {fileID: 8415694386978888964, guid: 4d271626e7689b4409245fc5bfa0acfe, type: 3}
-    spawnWeight: 10
+    spawnWeight: 40
   - isUnique: 1
     vehicleName: Truck_with_trailer
     prefab: {fileID: 6102565633496029519, guid: b5572d11c453abd41a7b044132b1612b, type: 3}
-    spawnWeight: 10
+    spawnWeight: 20
+  goldenCarChance: 0.1
   trafficSpeed: 8
   spawnInterval: 0.5
-  uniqueCarChance: 0.1
+  uniqueCarChance: 0.3
 --- !u!4 &1046492499
 Transform:
   m_ObjectHideFlags: 0
@@ -1268,90 +1269,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4510931763765628274, guid: da529554c4ab23a4d97f3d27ed734457, type: 3}
   m_PrefabInstance: {fileID: 4601590475248573702}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &2101542522
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 1241471675785928054, guid: 4473ff5eddcd9374b8c2ac737d92ace0, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -0.55726
-      objectReference: {fileID: 0}
-    - target: {fileID: 1241471675785928054, guid: 4473ff5eddcd9374b8c2ac737d92ace0, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -1.12602
-      objectReference: {fileID: 0}
-    - target: {fileID: 1241471675785928054, guid: 4473ff5eddcd9374b8c2ac737d92ace0, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1241471675785928054, guid: 4473ff5eddcd9374b8c2ac737d92ace0, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1241471675785928054, guid: 4473ff5eddcd9374b8c2ac737d92ace0, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1241471675785928054, guid: 4473ff5eddcd9374b8c2ac737d92ace0, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1241471675785928054, guid: 4473ff5eddcd9374b8c2ac737d92ace0, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1241471675785928054, guid: 4473ff5eddcd9374b8c2ac737d92ace0, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1241471675785928054, guid: 4473ff5eddcd9374b8c2ac737d92ace0, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1241471675785928054, guid: 4473ff5eddcd9374b8c2ac737d92ace0, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4304112757356210399, guid: 4473ff5eddcd9374b8c2ac737d92ace0, type: 3}
-      propertyPath: m_Name
-      value: Enemy
-      objectReference: {fileID: 0}
-    - target: {fileID: 4304112757356210399, guid: 4473ff5eddcd9374b8c2ac737d92ace0, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 4304112757356210399, guid: 4473ff5eddcd9374b8c2ac737d92ace0, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 2101542524}
-  m_SourcePrefab: {fileID: 100100000, guid: 4473ff5eddcd9374b8c2ac737d92ace0, type: 3}
---- !u!1 &2101542523 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4304112757356210399, guid: 4473ff5eddcd9374b8c2ac737d92ace0, type: 3}
-  m_PrefabInstance: {fileID: 2101542522}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &2101542524
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2101542523}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9608aa3f38a6a9b4eb3f047f2f38bc43, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyAttack
-  health: {fileID: 0}
-  damage: 1
-  enemyDamage: 1
 --- !u!1001 &605360374041756500
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1559,5 +1476,4 @@ SceneRoots:
   - {fileID: 821022875}
   - {fileID: 688022630}
   - {fileID: 605360374041756500}
-  - {fileID: 2101542522}
   - {fileID: 2032565752}

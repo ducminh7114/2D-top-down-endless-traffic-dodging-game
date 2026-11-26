@@ -4,12 +4,11 @@ using UnityEngine.UIElements;
 
 public class HighScoreDisplay : MonoBehaviour
 {
-    [SerializeField] public Label highScoreText;
-
+     public Label highScoreText;
     void OnEnable()
     {
         var root = GetComponent<UIDocument>().rootVisualElement;
-        highScoreText = root.Q<Label>("gameOverScoreText");
+        highScoreText = root.Q<Label>("HighScoreText");
     }
 
     private void Start()

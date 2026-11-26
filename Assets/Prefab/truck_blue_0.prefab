@@ -396,3 +396,7 @@ MonoBehaviour:
   RightHeadlight: {fileID: 0}
   LeftHeadlight: {fileID: 0}
   blinkInterval: 0.3
+  isGolden: 0
+  GoldColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  vehicleRenderer: {fileID: 0}
+  CoinReward: 1
